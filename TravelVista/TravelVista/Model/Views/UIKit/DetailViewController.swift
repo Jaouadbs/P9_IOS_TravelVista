@@ -94,7 +94,7 @@ class DetailViewController: UIViewController, MKMapViewDelegate {
         // la connexion est tjrs présente avec storyboard
         titleView.isHidden = true
 
-        // Contraintes: Lavouvelle vue occupe exactement la meme position
+        // Contraintes: La Nouvelle vue occupe exactement la meme position
         // taille que  l'ancienne titleView
         NSLayoutConstraint.activate([
             hostedView.topAnchor.constraint(equalTo: targetSuperView.topAnchor),

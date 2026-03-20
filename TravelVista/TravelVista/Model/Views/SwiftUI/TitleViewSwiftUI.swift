@@ -19,6 +19,7 @@ struct TitleViewSwiftUI: View {
                 Text(countryName)
                     .font(.system(size: 22))
                     .foregroundColor(Color("CustomBlue"))
+                    .bold()
                 Text(capitalName)
                     .font(.system(size: 17, weight: .regular))
                     .foregroundColor(Color(white: 0.45))          
@@ -27,16 +28,15 @@ struct TitleViewSwiftUI: View {
 
             Spacer()
 
-            // Partie droite : chiffre + 1 étoile (identique à CellView)
+            // Partie droite : étoile en boucle
             HStack(spacing: 6) {
-                Text("\(rate)")
-                    .font(.system(size: 20, weight: .regular))
-                    .foregroundColor(.primary)
-                Image(systemName: "star.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 28, height: 28)
-                    .foregroundColor(Color("CustomSand"))
+                ForEach(0..<rate, id:\.self) {_ in
+                    Image(systemName: "star.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 28, height: 28)
+                        .foregroundColor(Color("CustomSand"))
+                }
             }
             .padding(.trailing, 16)
         }
