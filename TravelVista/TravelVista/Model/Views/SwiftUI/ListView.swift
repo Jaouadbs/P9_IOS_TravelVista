@@ -9,11 +9,13 @@ import SwiftUI
 
 // MARK: - Vue des cellules(remplace CustomCell)
 struct CellView: View {
+    // Reçoit un vrai Country au lieu de données statiques
+    let country: Country
     var body: some View {
         HStack(spacing: 12) {
 
-            // Image ronde
-            Image("norvege")
+            // Image ronde du pays
+            Image(country.pictureName)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 50, height: 50)
@@ -21,10 +23,10 @@ struct CellView: View {
 
             // Nom du pays + capitale
             VStack(alignment: .leading, spacing: 2) {
-                Text("Toto")
+                Text(country.name)
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(Color("CustomBlue"))
-                Text("Lorem Ipsum")
+                Text(country.capital)
                     .font(.system(size: 14))
                     .foregroundStyle(.secondary)
             }
@@ -32,7 +34,7 @@ struct CellView: View {
 
             // Note + étoile
             HStack(spacing: 12) {
-                Text("4")
+                Text("\(country.rate)")
                     .font(.system(size: 20, weight: .regular))
                     .foregroundStyle(.primary)
                 Image(systemName: "star.fill")
@@ -49,35 +51,44 @@ struct CellView: View {
 
 // MARK: - ListView(Remplace ListViewController)
 struct ListView: View {
+
+    // ViewModel fournit les données
+    @StateObject private var viewModel = ListViewModel()
+
     var body: some View {
-        // Navigation à ajouter après
-        List{
-            // Sections
-            Section(header: Text("Europe")) {
-                CellView()
-                CellView()
-                CellView()
-                CellView()
+        // NavigationView pour gérer la navigation
+        NavigationView {
+            List {
+                // Parcours les regions et pays
+                ForEach(viewModel.regions, id: \.name) { region in
+                    Section(header: Text(region.name)) {
+                        ForEach(region.countries, id:\.name) { country in
+
+                            // On passe le pays à DetailView
+                            NavigationLink(destination: DetailView(country: country)) {
+                                CellView(country: country)
+                            }
+                        }
+                    }
+                }
             }
-            Section(header: Text("Asie")) {
-                CellView()
-            }
-            Section(header: Text("Afrique")) {
-                CellView()
-                CellView()
-            }
-            Section(header: Text("Ameriques")) {
-                CellView()
-                CellView()
+                .listStyle(.plain)
+                .navigationTitle("Liste de voyages")
+                .navigationBarTitleDisplayMode(.inline)
             }
         }
-        .listStyle(.plain)
-        .navigationTitle("Liste de voyages")
     }
-}
 
-#Preview("CellView", traits: .sizeThatFitsLayout) {
-    CellView()
+#Preview("CellView") {
+    CellView(country: Country(
+        name: "Novège",
+        capital: "Oslo",
+        description: "Beau Pays",
+        rate: 4, pictureName: "Novege",
+        coordinates: Coordinates(latitude: 59.9139, longitude: 10.7522)
+    ))
+    .previewLayout(.sizeThatFits)
+
 }
 
 #Preview ("ListView") {
