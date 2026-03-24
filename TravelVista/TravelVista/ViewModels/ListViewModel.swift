@@ -12,8 +12,9 @@ class ListViewModel: ObservableObject {
     // Tableau de region
     @Published var regions: [Region] = []
 
-    init() {
+    // Injection de dépendance via ServiceProtocol
+    init(service : ServiceProtocol = Service()) {
         // Même appel que dans l'ancien ListViewController
-        self.regions = Service().load("Source.json")
+        self.regions = service.load("Source.json")
     }
 }
